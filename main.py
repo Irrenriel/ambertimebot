@@ -52,7 +52,8 @@ async def normal_handler(event):
 		elif 'Lab is открыто.' in msg2.message:
 			answer += '{@Laniakeo | Открыто\u2705 | ' + mana2[0] + '\U0001f4a7}\n\n'
 		else:
-			answer += '{@Laniakeo | ERROR | ' + mana2[0] + '\U0001f4a7}\n\n'
+			answer += '{@Laniakeo | ERROR | ' + mana2[0] + '\U0001f4a7}\n'
+		answer += '(ПРОБНЫЙ ТЕСТ БОТА)'
 
 		await client.send_message('mytestgroupqwerty', answer, parse_mode = 'md')
 
