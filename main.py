@@ -13,7 +13,7 @@ client = TelegramClient('AmberTime_bot', api_id, api_hash)
 x = str(random.uniform(1,4))
 y = str(random.uniform(1,4))
 
-@client.on(events.NewMessage(chats=('My test group')))
+@client.on(events.NewMessage(chats=('🌳Терновый Куст')))
 async def normal_handler(event):
 	if event.message.message == '/gold':
 		async with client.conversation('ChatWarsBot') as conv:
