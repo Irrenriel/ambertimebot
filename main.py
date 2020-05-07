@@ -15,6 +15,7 @@ y = str(random.uniform(1,4))
 
 @client.on(events.NewMessage(chats=('My test group')))
 async def normal_handler(event):
+	await client.send_message('mytestgroupqwerty', 'Bot is ready!')
 	if event.message.message == '/gold':
 		async with client.conversation('ChatWarsBot') as conv:
 			time.sleep(float(x[0:4]))
