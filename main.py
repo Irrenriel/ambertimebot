@@ -4,9 +4,8 @@ import re
 import random
 import os
 
-api_id = 1209411
-bot_hash = os.environ.get('BOT_API_HASH')
-api_hash = str(bot_hash)
+api_id = API_ID_FROM_TELEGRAM
+api_hash = API_HASH_FROM_TELEGRAM
 
 client = TelegramClient('AmberTime_bot', api_id, api_hash)
 
