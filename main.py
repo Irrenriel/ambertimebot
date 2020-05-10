@@ -1,48 +1,21 @@
 from telethon import TelegramClient, events, sync
+from config import *
+import logging
 import time
 import re
 import random
 import os
 
 # Подключение к Telethon клиенту
-api_id = API_ID_FROM_TLGRM
-api_hash = 'API_HAS_FROM_TLGRM'
-client = TelegramClient('SESSION_NAME', api_id, api_hash)
+client = TelegramClient(session_name, api_id, api_hash)
+
+# Ведение логов
+logging.basicConfig(filename='AmberTime_bot.log',
+					filemode='w',
+					format='--- %(asctime)s ---\n%(filename)s %(levelname)s in line %(lineno)s \n%(message)s')
 
 # Список ID крафтов
 craft_id = ['36', '37', '38']
-
-
-
-# Режим разработки
-TestMode = False
-
-
-
-if TestMode == True:
-# Чат в котором реагируют триггеры лавки
-	echo_chat_id = 'My test group'
-# Диалог ЛС в котором реагируют крафт-триггеры
-	echo_chat_id_im = 394557686
-# Чат в который приходит ответ на триггеры лавки
-	chat_id = 'mytestgroupqwerty'
-# Диалог ЛС в который приходит ответ на крафт-триггеры
-	chat_id_im = 394557686
-# Бот Chat Wars
-	CW_chat_id = 265204902
-
-
-else:
-# Чат в котором реагируют триггеры лавки
-	echo_chat_id = '🌳Терновый Куст'
-# Диалог ЛС в котором реагируют крафт-триггеры
-	echo_chat_id_im = 560877161
-# Чат в который приходит ответ на триггеры лавки
-	chat_id = 1306127576
-# Диалог ЛС в который приходит ответ на крафт-триггеры
-	chat_id_im = 560877161
-# Бот Chat Wars
-	CW_chat_id = 265204902
 
 
 
@@ -89,7 +62,6 @@ async def normal_handler(event):
 			answer += '{@Laniakeo | Открыто\u2705 | ' + mana2[0] + '\U0001f4a7}\n\n'
 		else:
 			answer += '{@Laniakeo | ERROR | ' + mana2[0] + '\U0001f4a7}\n'
-
 		await client.send_message(chat_id, answer, parse_mode = 'md')
 
 	# Открыть магазин
@@ -105,6 +77,13 @@ async def normal_handler(event):
 		else:
 			await client.send_message(chat_id, 'ERROR')
 
+	# "Бать, ты живой?"", проверка работает ли бот
+	elif event.message.message == '/tikak':
+		await client.send_message(chat_id, 'Бот на месте!')
+
+	# Помощь по командам, /help
+	elif event.message.message == '/help':
+		pass
 
 
 # Дистанционный крафт
@@ -120,13 +99,23 @@ async def normal_handler(event):
 		await client.send_message(chat_id_im, craft_msg.message)
 
 	# Принять ресурсы, /g_receive
-	elif '/g_recieve' in event.message.message:
-		recieve = re.search(r'/g_receive.*')
+	elif '/g_receive' in event.message.message:
+		recieve = re.findall(r'/g_receive.*', event.message.message)
 		async with client.conversation(CW_chat_id) as conv:
 			time.sleep(float(str(random.uniform(1,4))[0:4]))
 			recieve_send = await conv.send_message(event.message.message)
 			recieve_msg = await conv.get_response()
 		await client.send_message(chat_id_im, recieve_msg.message)
 
-client.start()
-client.run_until_disconnected()
+	# Скинуть ресурсы, /g_deposit
+	elif event.message.message.startswith('/g_deposit'):
+		deposit = re.findall(r'/g_deposit.*', event.message.message)
+		async with client.conversation(CW_chat_id) as conv:
+			time.sleep(float(str(random.uniform(1,4))[0:4]))
+			deposit_send = await conv.send_message(event.message.message)
+			deposit_msg = await conv.get_response()
+		await client.send_message(chat_id_im, deposit_msg.message)
+
+client.loop.run_forever()
+if __name__ == '__main__':
+	client.start()
